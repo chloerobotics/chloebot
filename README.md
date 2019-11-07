@@ -2,13 +2,15 @@
 
 <img src="https://raw.githubusercontent.com/dwyl/repo-badges/master/highresPNGs/start-with-why-HiRes.png" height="20" width="100">
 
-Our 3 philosophies:
+Our philosophies:
 
 "The most beautiful thing we can experience is the mysterious. It is the source of all true art and all science" - Albert Einstein
 
 "Anyone can cook" - that french chef from Ratatouille
 
 "less bragging and diamonds, more science and math" - chloebot 
+
+"Famous Quotes are pretentious" - Vicki 
 
 Most AI research today is done by universities and large corporate AI labs. Our goal is to make the pursuit of this type of science and creativity a viable project for any mind that is excited by that feeling of mystery and building working machines, from all walks of life, not just the academic elite. 
 
@@ -31,6 +33,10 @@ Whenever you want to modify the code, activate virtual environment with python 3
 install dependencies
 
 `$ pip install -r requirements.txt`
+
+- Python 3.6
+- torch==1.3.0 (PyTorch)
+- nltk==3.4.5 (Natural Language Toolkit)
 
 save new dependences to requirements
 
