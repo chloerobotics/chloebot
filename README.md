@@ -4,7 +4,7 @@
 
 Our philosophies:
 
-"The most beautiful experience we have is the mysterious. It is the  emotion that stands at the cradle of art and science" - Albert Einstein
+"The most beautiful experience we have is the mysterious. It is the  emotion that stands at the cradle of all art and science" - Albert Einstein
 
 "Anyone can cook" - that french chef from Ratatouille
 
@@ -16,7 +16,7 @@ Most AI research today is done by universities and corporate labs. Our goal is t
 
 The goal here is to make new research approachable, silly and fun to the beginner programmer or motivated amateur with a basic understanding of linear algebra and computer science. We will be building a chatbot and updating it's abilities using the latest research and our own ideas. chloebot is a conversational neural network based on the Transformer sequence model. Modules are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from basic linear algebra and programming.
 
-[Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn python so you can learn how Deep Learning Transformers work for Natural Language Processing i suggest learning through  [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra i recommend [Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and how it applies to neural networks [Deep learning](https://youtu.be/aircAruvnKk) by [3Blue1Brown](https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw). 
+[Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn so you can see how Deep Learning Transformers work for NLP i suggest using [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra i recommend [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and how it applies to neural networks [Deep learning](https://youtu.be/aircAruvnKk)
 
 ### How to Start
 
