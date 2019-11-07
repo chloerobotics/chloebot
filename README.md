@@ -12,7 +12,7 @@ Our philosophies:
 
 "Famous Quotes are pretentious" - Vicki 
 
-Most AI research today is done by universities and corporate labs. Our goal is to make the pursuit of this type of science and creativity a viable project for any mind excited by that feeling of mystery and building machines, from all walks of life, not just the elite. 
+Most AI research today is done by universities and corporate labs. Our goal is to make the pursuit of this type of science and creativity a viable project for any mind excited by that feeling of mystery and building autonomous machines, from all walks of life, not just the elite. 
 
 The goal here is to make new research approachable, silly and fun to the beginner programmer or motivated amateur with a basic understanding of linear algebra and computer science. We will be building a chatbot and updating it's abilities using the latest research and our own ideas. chloebot is a conversational neural network based on the Transformer sequence model. Modules are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from basic linear algebra and programming.
 
