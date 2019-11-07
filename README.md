@@ -21,7 +21,7 @@ The goal here is to make new research approachable, silly and fun to the beginne
 ## Table of Contents
 
 - [START_HERE](START_HERE.ipynb) summon and meet chloe, an introduction 
-- [TALK](Talk.ipynb) tongue-tied, joint probability distribution and beam search
+- [TALK](notebooks/Talk.ipynb) tongue-tied, joint probability distribution and beam search
 
 ### How to Start
 
