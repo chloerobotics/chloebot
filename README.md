@@ -8,7 +8,7 @@ Our philosophies:
 
 "Anyone can cook" - that french chef from Ratatouille
 
-"less bragging and diamonds, more science and math" - chloebot 
+"less bragging and diamonds , more science and math <eos>" - chloebot 
 
 "Famous Quotes are pretentious" - Vicki 
 
