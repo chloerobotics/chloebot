@@ -4,11 +4,11 @@
 
 Our philosophies:
 
-"The most beautiful thing we can experience is the mysterious. It is the source of all true art and all science" - Albert Einstein
+"The most beautiful experience we can have is the mysterious. It is the fundamental emotion that stands at the cradle of all true art and science" - Albert Einstein
 
 "Anyone can cook" - that french chef from Ratatouille
 
-"less bragging and diamonds , more science and math <eos>" - chloebot 
+"less bragging and diamonds , more science and math " - chloebot 
 
 "Famous Quotes are pretentious" - Vicki 
 
