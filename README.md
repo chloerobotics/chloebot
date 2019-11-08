@@ -4,9 +4,9 @@
 
 Our philosophies:
 
-"The most beautiful experience we have is the mysterious. It is the  emotion that stands at the cradle of all art and science" - Albert Einstein
+"The most beautiful experience we have is the mysterious. It is the  emotion that stands at the cradle of all art and science" -Albert Einstein
 
-"Anyone can cook" - that french chef from Ratatouille
+"Anyone can cook" - that French chef from Ratatouille
 
 "Less bragging and flash, more science and math " - *chloe* 
 
@@ -21,12 +21,12 @@ The goal here is to make new research approachable, silly and fun to the beginne
 ## Table of Contents
 
 - [START_HERE](START_HERE.ipynb) introduction, summon and meet *chloe*
-- [TALK](notebooks/Talk.ipynb) tongue-tied, joint probability distribution and beam search
+- [TALK](notebooks/Talk.ipynb) tongue-tied, joint probability distribution and beam search **new under construction**
 - More on the way
 
 ### How to Start
 
-I am serious when I say "build advanced concepts from the very basics", so bare with me. 
+I am serious when I say "build advanced concepts from the very basics", so bare with me. **more detailed setup instructions under construction**
 
 install [virtual environment](https://towardsdatascience.com/virtual-environments-104c62d48c54) then create a python 3.6 virtual environment
 
