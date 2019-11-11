@@ -12,9 +12,11 @@ Our philosophies:
 
 "Famous quotes are pretentious" -Vicki 
 
-Most AI research today is done by universities and corporate labs. Our goal is to make the pursuit of this type of science and creativity a viable project for any mind excited by that feeling of mystery and building autonomous machines, from all walks of life, not just the elite. 
+Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows  
 
-The goal here is to make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math. We will be building straight up from the basics, to linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is an end to end conversational neural network or chatbot. She is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics. [Support *chloe*](https://www.patreon.com/chloerobotics)
+To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is an end to end conversational neural network or chatbot. She is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics. 
+
+[Support *chloe* on Patreon](https://www.patreon.com/chloerobotics)
 
 [Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn so you can see how Deep Learning Transformers work for NLP I suggest using [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra I recommend [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and [neural networks](https://youtu.be/aircAruvnKk)
 
