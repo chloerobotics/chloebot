@@ -1,12 +1,41 @@
 import re
 import numpy as np
-import spacy
+#import spacy
+from nltk.tokenize import TweetTokenizer
 
 import torch
 from torchtext import data
 from torch.autograd import Variable
 
 from torchtext import data
+
+class Options:
+    def __init__(self, batchsize=4, device=-1, epochs=20, lr=0.01, 
+                 beam_width=2, max_len=20, save_path='saved/weights/model_weights'):
+        self.batchsize = batchsize
+        self.device = device
+        self.epochs = epochs
+        self.lr = lr
+        self.k = beam_width
+        self.max_len = max_len
+        self.save_path = save_path
+
+class Tokenizer(object):
+    
+    def __init__(self):
+
+        self.tweettokenizer = TweetTokenizer()
+            
+    def tokenize(self, sentence):
+        sentence = re.sub(
+        r"[\*\"“”\n\\…\+\-\/\=\(\)‘•:\[\]\|’\!;]", " ", str(sentence))
+        sentence = re.sub(r"[ ]+", " ", sentence)
+        sentence = re.sub(r"\!+", "!", sentence)
+        sentence = re.sub(r"\,+", ",", sentence)
+        sentence = re.sub(r"\?+", "?", sentence)
+        sentence = sentence.lower()
+        sentence = self.tweettokenizer.tokenize(sentence)
+        return sentence 
 
 class MyIterator(data.Iterator):
     '''
@@ -42,45 +71,36 @@ def batch_size_fn(new, count, sofar):
     tgt_elements = count * max_tgt_in_batch
     return max(src_elements, tgt_elements)
 
-class tokenize(object):
-    
-    def __init__(self, lang):
-        self.nlp = spacy.load(lang)
-            
-    def tokenizer(self, sentence):
-        sentence = re.sub(
-        r"[\*\"“”\n\\…\+\-\/\=\(\)‘•:\[\]\|’\!;]", " ", str(sentence))
-        sentence = re.sub(r"[ ]+", " ", sentence)
-        sentence = re.sub(r"\!+", "!", sentence)
-        sentence = re.sub(r"\,+", ",", sentence)
-        sentence = re.sub(r"\?+", "?", sentence)
-        sentence = sentence.lower()
-        return [tok.text for tok in self.nlp.tokenizer(sentence) if tok.text != " "]
+def json2datatools(path = None, tokenizer = None, opt = None):
 
-def csv2datatools(path, lang, options = None):
-    if options == None:
-        options = options()
-        options.batchsize = 4
-    options.device = torch.device("cuda:0") if torch.cuda.is_available() else -1
-    language_class = tokenize(lang)
-    input_field = data.Field(lower=True, tokenize=language_class.tokenizer,
+    if opt == None:
+        opt = Options()
+        opt.batchsize = 4
+        opt.device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+
+    if path == None:
+        path = 'saved/pairs.json' 
+
+    if tokenizer == None:
+        tokenizer = Tokenizer()
+        
+    input_field = data.Field(lower=True, tokenize=tokenizer.tokenize, 
                             unk_token='<unk>', init_token='<sos>', eos_token='<eos>')
-    output_field = data.Field(lower=True, tokenize=language_class.tokenizer, 
+    output_field = data.Field(lower=True, tokenize=tokenizer.tokenize, 
                             unk_token='<unk>', init_token='<sos>', eos_token='<eos>')
 
-    data_fields = [('input_text', input_field), ('output_text', output_field)]
-    trainingset = data.TabularDataset(path,skip_header=True,format='csv', 
-                                     fields=data_fields)
+    fields={'listen':('listen', input_field),'reply':('reply', output_field)} 
+
+    trainingset = data.TabularDataset(path, format='json', fields=fields) 
+
     input_field.build_vocab(trainingset)
     output_field.build_vocab(trainingset)
-    training_iterator = MyIterator(trainingset, batch_size=options.batchsize, 
-                        device=options.device, repeat=False, 
-                        sort_key=lambda x: (len(x.input_text), len(x.output_text)), 
+    training_iterator = MyIterator(trainingset, batch_size=opt.batchsize, 
+                        device=opt.device, repeat=False, 
+                        sort_key=lambda x: (len(x.listen), len(x.reply)), 
                         train=True, shuffle=True)
-    options.src_pad = input_field.vocab.stoi['<pad>']
-    options.trg_pad = output_field.vocab.stoi['<pad>']
-    return training_iterator, input_field, output_field, options
+    opt.src_pad = input_field.vocab.stoi['<pad>']
+    opt.trg_pad = output_field.vocab.stoi['<pad>']
+    return training_iterator, input_field, output_field, opt
 
-class Options:
-    def __init__(self, batchsize=4):
-        self.batchsize = batchsize
+

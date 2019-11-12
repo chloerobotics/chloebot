@@ -2,7 +2,13 @@
 
 <img src="https://raw.githubusercontent.com/dwyl/repo-badges/master/highresPNGs/start-with-why-HiRes.png" height="20" width="100">
 
-Our philosophies:
+## What is this ?
+
+Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows  
+
+To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is an end to end conversational neural network or chatbot. She is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics. 
+
+## Our philosophies
 
 "The most beautiful experience we have is the mysterious. It is the  emotion that stands at the cradle of all art and science" -Albert Einstein
 
@@ -12,13 +18,17 @@ Our philosophies:
 
 "Famous quotes are pretentious" -Vicki 
 
-Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows  
+## What if I am a Noob ?
 
-To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is an end to end conversational neural network or chatbot. She is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics. 
-
-[Support *chloe* on Patreon](https://www.patreon.com/chloerobotics)
+Youre a noob? thats awesome! 
 
 [Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn so you can see how Deep Learning Transformers work for NLP I suggest using [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra I recommend [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and [neural networks](https://youtu.be/aircAruvnKk)
+
+## Tech Stack 
+
+- Python 3.6
+- torch==1.3.0 (PyTorch)
+- nltk==3.4.5 (Natural Language Toolkit)
 
 ## Table of Contents
 
@@ -26,25 +36,42 @@ To make new research approachable, silly and fun to the motivated beginner progr
 - [TALK](notebooks/Talk.ipynb) tongue-tied, joint probability distribution and beam search **new under construction**
 - More on the way
 
-### How to Start
+## How to Start
 
 I am serious when I say "build advanced concepts from the very basics", so bare with me. **more detailed setup instructions under construction**
 
-install [virtual environment](https://towardsdatascience.com/virtual-environments-104c62d48c54) then create a python 3.6 virtual environment
 
-`$ python3 -m venv env`
+
+
+
+I am serious when I say "build advanced concepts from the very basics", so bare with me. **more detailed setup instructions under construction**
+
+sudo add-apt-repository ppa:jonathonf/python-3.6
+sudo apt-get update
+sudo apt-get install python3.6
+virtualenv --python=/usr/bin/python3.6 env36
+
+install [virtual environment](https://towardsdatascience.com/virtual-environments-104c62d48c54) then 
+
+[how to install Python 3.6 on ubuntu](http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/)
+
+[how to specify the Python executable you want to use](https://stackoverflow.com/questions/1534210/use-different-python-version-with-virtualenv)
+
+create a python 3.6 virtual environment, here i used env36 for python3.6 but you can use anything
+
+`$ python3.6 -m venv env36`
 
 Whenever you want to modify the code, activate virtual environment with python 3.6 inside the same folder as your environment env using 
 
-`$ source env/bin/activate`
+`$ source env36/bin/activate`
 
 install dependencies
 
 `$ pip install -r requirements.txt`
 
-- Python 3.6
-- torch==1.3.0 (PyTorch)
-- nltk==3.4.5 (Natural Language Toolkit)
+[even with virtual environments, some troubleshoot might be needed](https://github.com/tensorflow/tensorflow/issues/559)
+
+[with enough google searches you can find an answer for almost any problem](https://stackoverflow.com/questions/45912674/attributeerror-module-numpy-core-multiarray-has-no-attribute-einsum)
 
 save new dependences to requirements
 
@@ -53,3 +80,7 @@ save new dependences to requirements
 You can deactivate the virtual environment using the following command in your terminal:
 
 `$ deactivate`
+
+## How can I help you or get help from you?
+
+[Support *ChloeRobotics* on Patreon and send us a message](https://www.patreon.com/chloerobotics)

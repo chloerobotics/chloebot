@@ -18,7 +18,7 @@ def nopeak_mask(size, opt):
     "Mask out subsequent positions. aka subsequent_mask"
     np_mask = np.triu(np.ones((1, size, size)), k=1).astype('uint8')
     np_mask =  torch.from_numpy(np_mask) == 0
-    if opt.device != -1:
+    if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
       np_mask = np_mask.cuda()
     return np_mask
 
@@ -38,20 +38,26 @@ def create_masks(src, trg, opt):
         trg_mask = None
     return src_mask, trg_mask
 
-def talk_to_model(sentence, model, opt, SRC, TRG):
-    model.eval()
-    indexed = []
-    sentence = SRC.preprocess(sentence)
-    for tok in sentence:
-        if SRC.vocab.stoi[tok] != 0:
-            indexed.append(SRC.vocab.stoi[tok])
-        else:
-            indexed.append(get_synonym(tok, SRC))
-    sentence = Variable(torch.LongTensor([indexed]))
-    if opt.device != -1:
-        sentence = sentence.cuda()
-    sentence = beam_search(sentence, model, SRC, TRG, opt)
-    return  multiple_replace({' ?' : '?',' !':'!',' .':'.','\' ':'\'',' ,':','}, sentence)
+def talk_to_model(sentence, model, opt, SRC, TRG, explain=False):
+    try:
+        model.eval()
+        indexed = []
+        sentence = SRC.preprocess(sentence)
+        for tok in sentence:
+            if SRC.vocab.stoi[tok] != 0:
+                indexed.append(SRC.vocab.stoi[tok])
+            else:
+                indexed.append(get_synonym(tok, SRC))
+        sentence = Variable(torch.LongTensor([indexed]))
+
+        if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
+            sentence = sentence.cuda()
+
+        sentence = beam_search(sentence, model, SRC, TRG, opt)
+        return multiple_replace({' ?' : '?',' !':'!',' .':'.','\' ':'\'',' ,':','}, sentence)
+    except Exception as e:
+        if explain: print(e)
+        return "haha, got me, you will have to teach me how to reply to that, I haven't learned yet"
 
 def get_synonym(word, SRC):
     syns = wordnet.synsets(word)
@@ -74,7 +80,11 @@ def beam_search(src, model, SRC, TRG, opt):
         out = F.softmax(out, dim=-1)
         outputs, log_scores = k_best_outputs(outputs, out, log_scores, i, opt.k)
         ones = (outputs==eos_tok).nonzero() # Occurrences of end symbols for all input sentences.
-        sentence_lengths = torch.zeros(len(outputs), dtype=torch.long).cuda()
+        sentence_lengths = torch.zeros(len(outputs), dtype=torch.long)
+
+        if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
+            sentence_lengths = sentence_lengths.cuda()
+
         for vec in ones:
             i = vec[0]
             if sentence_lengths[i]==0: # First end symbol has not been found yet
@@ -87,8 +97,8 @@ def beam_search(src, model, SRC, TRG, opt):
             ind = ind.data[0]
             break
     if ind is None:
-        print(outputs[0]==eos_tok)
-        print((outputs[0]==eos_tok).nonzero())
+        #print(outputs[0]==eos_tok)
+        #print((outputs[0]==eos_tok).nonzero())
         length = (outputs[0]==eos_tok).nonzero()[0]
         return ' '.join([TRG.vocab.itos[tok] for tok in outputs[0][1:length]])
     else:
@@ -112,7 +122,7 @@ def init_vars(src, model, SRC, TRG, opt):
     #print(next(model.parameters()).is_cuda,src.is_cuda,src_mask.is_cuda)
     e_output = model.encoder(src, src_mask)
     outputs = torch.LongTensor([[init_tok]])
-    if opt.device != -1:
+    if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
         outputs = outputs.cuda()
     trg_mask = nopeak_mask(1, opt)
     out = model.out(model.decoder(outputs, e_output, src_mask, trg_mask))
@@ -123,12 +133,12 @@ def init_vars(src, model, SRC, TRG, opt):
     log_scores = torch.Tensor([math.log(prob) for prob in probs.data[0]]).unsqueeze(0)
     #print(log_scores)
     outputs = torch.zeros(opt.k, opt.max_len).long()
-    if opt.device != -1:
+    if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
         outputs = outputs.cuda()
     outputs[:, 0] = init_tok
     outputs[:, 1] = ix[0]
     e_outputs = torch.zeros(opt.k, e_output.size(-2),e_output.size(-1))
-    if opt.device != -1:
+    if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
         e_outputs = e_outputs.cuda()
     e_outputs[:, :] = e_output[0]
     return outputs, e_outputs, log_scores
@@ -140,14 +150,21 @@ def multiple_replace(dict, text):
   return regex.sub(lambda mo: dict[mo.string[mo.start():mo.end()]], text)
 
 def trainer(model, data_iterator, options, optimizer, scheduler):
+
+    if torch.cuda.is_available() and options.device == torch.device("cuda:0"):
+        print("a GPU was detected, model will be trained on GPU")
+        model = model.cuda()
+    else:
+        print("training on cpu")
+
     model.train()
     start = time.time()
     best_loss = 100
     for epoch in range(options.epochs):
         total_loss = 0
         for i, batch in enumerate(data_iterator): 
-            src = batch.input_text.transpose(0,1)
-            trg = batch.output_text.transpose(0,1)
+            src = batch.listen.transpose(0,1)
+            trg = batch.reply.transpose(0,1)
             trg_input = trg[:, :-1]
             src_mask, trg_mask = create_masks(src, trg_input, options)
             preds = model(src, trg_input, src_mask, trg_mask)
@@ -167,7 +184,8 @@ def trainer(model, data_iterator, options, optimizer, scheduler):
             torch.save(model.state_dict(), options.save_path)
         print("%dm: epoch %d loss = %.3f" %((time.time() - start)//60, epoch, epoch_loss))
         total_loss = 0
-    return model 
+
+    return model
 
 class CosineWithRestarts(torch.optim.lr_scheduler._LRScheduler):
     """
@@ -198,11 +216,11 @@ class CosineWithRestarts(torch.optim.lr_scheduler._LRScheduler):
         self.T_max = T_max
         self.eta_min = eta_min
         self.factor = factor
-        self._last_restart: int = 0
-        self._cycle_counter: int = 0
-        self._cycle_factor: float = 1.
-        self._updated_cycle_len: int = T_max
-        self._initialized: bool = False
+        self._last_restart = 0
+        self._cycle_counter = 0
+        self._cycle_factor = 1.0
+        self._updated_cycle_len = T_max
+        self._initialized = False
         super(CosineWithRestarts, self).__init__(optimizer, last_epoch)
 
     def get_lr(self):
