@@ -1,6 +1,8 @@
 # Environments
 .env
 .venv
+.env36
+.env*
 env/
 venv/
 ENV/
