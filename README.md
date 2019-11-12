@@ -6,7 +6,9 @@
 
 Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows  
 
-To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is an end to end conversational neural network or chatbot. She is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics. 
+*chloe* is an end to end neural network chatbot based on the transformer. Accomplishing goals through conversation is a task we can all relate to, thus chatbots are an ideal agent through which to connect new research to our current understanding of AI and demonstrate how new research brings us closer to human level intelligence or not
+
+To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics. 
 
 ## Our philosophies
 
@@ -46,6 +48,10 @@ if you already have python 3.6 and virtual environments, create a python 3.6 vir
 
 `$ python3.6 -m venv env36`
 
+if python3.6 is your default version, then when you type `python` into your terminal then it should say python version 3.6.x, and for you making the virtual environment is as simple as 
+
+`$ python -m venv env`
+
 otherwise it is simple to get python3.6 and virtual environments
 
 [how to install Python 3.6 on ubuntu](http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/)
@@ -64,9 +70,9 @@ install [virtual environment](https://towardsdatascience.com/virtual-environment
 `virtualenv --python=/usr/bin/python3.6 env36`
 
 
-Whenever you want to modify the code, activate virtual environment with python 3.6 inside the same folder as your environment env using 
+Whenever you want to modify the code / talk to chloe locally, activate the virtual environment inside the same folder as your environment env using 
 
-`$ source env36/bin/activate`
+`$ source env/bin/activate`
 
 install dependencies
 

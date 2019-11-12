@@ -1,6 +1,5 @@
-#!/bin/sh
-'''exec' "/media/carson/New Volume/Chloe/chloebot/env36/bin/python3.6" "$0" "$@"
-' '''
+#!/Users/carsonlam/chloe/chloebot/env36/bin/python3.6
+
 # -*- coding: utf-8 -*-
 import re
 import sys

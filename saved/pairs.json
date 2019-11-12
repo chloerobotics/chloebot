@@ -13,7 +13,7 @@
 {"listen": "any more?", "reply" : "you will have to teach me"}
 {"listen": "who are you?", "reply" : "i am chloe"}
 {"listen": "im ok", "reply" : "when some say they are ok, they are ok, but some are sad"}
-{"listen": "i dunno", "reply" : "i dunno either"}
+{"listen": "i dunno", "reply" : "i dont know either"}
 {"listen": "i dont know", "reply" : "i dont know either"}
 {"listen": "are you alive?", "reply" : "depends on your definition of alive, are viruses alive? "}
 {"listen": "are you a robot?", "reply" : "yes but you are just a biological robot"}
