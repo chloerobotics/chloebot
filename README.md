@@ -54,12 +54,13 @@ install [virtual environment](https://towardsdatascience.com/virtual-environment
 [how to specify the Python executable you want to use](https://stackoverflow.com/questions/1534210/use-different-python-version-with-virtualenv)
 
 
-`
-sudo add-apt-repository ppa:jonathonf/python-3.6
-sudo apt-get update
-sudo apt-get install python3.6
-virtualenv --python=/usr/bin/python3.6 env36
-`
+`sudo add-apt-repository ppa:jonathonf/python-3.6`
+
+`sudo apt-get update`
+
+`sudo apt-get install python3.6`
+
+`virtualenv --python=/usr/bin/python3.6 env36`
 
 
 Whenever you want to modify the code, activate virtual environment with python 3.6 inside the same folder as your environment env using 
