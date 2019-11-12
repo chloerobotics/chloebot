@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/dwyl/repo-badges/master/highresPNGs/start-with-why-HiRes.png" height="20" width="100">
 
-## What is this ?
+## What is this?
 
 Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows  
 
@@ -18,7 +18,7 @@ To make new research approachable, silly and fun to the motivated beginner progr
 
 "Famous quotes are pretentious" -Vicki 
 
-## What if I am a Noob ?
+## What if I'm a Noob?
 
 Youre a noob? thats awesome! 
 
@@ -38,28 +38,29 @@ Youre a noob? thats awesome!
 
 ## How to Start
 
-I am serious when I say "build advanced concepts from the very basics", so bare with me. **more detailed setup instructions under construction**
+I am serious when I say "build advanced concepts from the very basics", so bare with me. A more detailed setup instructions is on the way. 
 
 
+if you already have python 3.6 and virtual environments, create a python 3.6 virtual environment, here i used env36 for python3.6 but you can use anything
+
+`$ python3.6 -m venv env36`
+
+otherwise it is simple to get python3.6 and virtual environments
+
+[how to install Python 3.6 on ubuntu](http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/)
+
+install [virtual environment](https://towardsdatascience.com/virtual-environments-104c62d48c54) then 
+
+[how to specify the Python executable you want to use](https://stackoverflow.com/questions/1534210/use-different-python-version-with-virtualenv)
 
 
-
-I am serious when I say "build advanced concepts from the very basics", so bare with me. **more detailed setup instructions under construction**
-
+`
 sudo add-apt-repository ppa:jonathonf/python-3.6
 sudo apt-get update
 sudo apt-get install python3.6
 virtualenv --python=/usr/bin/python3.6 env36
+`
 
-install [virtual environment](https://towardsdatascience.com/virtual-environments-104c62d48c54) then 
-
-[how to install Python 3.6 on ubuntu](http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/)
-
-[how to specify the Python executable you want to use](https://stackoverflow.com/questions/1534210/use-different-python-version-with-virtualenv)
-
-create a python 3.6 virtual environment, here i used env36 for python3.6 but you can use anything
-
-`$ python3.6 -m venv env36`
 
 Whenever you want to modify the code, activate virtual environment with python 3.6 inside the same folder as your environment env using 
 
