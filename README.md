@@ -24,10 +24,11 @@ Youre a noob? thats awesome!
 
 [Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn so you can see how Deep Learning Transformers work for NLP I suggest using [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra I recommend [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and [neural networks](https://youtu.be/aircAruvnKk)
 
-## Tech Stack 
+## NLP Stack 
 
 - Python 3.6
 - torch==1.3.0 (PyTorch)
+- torchtext 
 - nltk==3.4.5 (Natural Language Toolkit)
 
 ## Table of Contents
@@ -82,6 +83,20 @@ save new dependences to requirements
 You can deactivate the virtual environment using the following command in your terminal:
 
 `$ deactivate`
+
+## More Tips and Tricks
+
+if you get a `ImportError: No module named` while at the saem time in your Terminal you get 
+
+`pip3 install import-ipynb`
+
+`Requirement already satisfied: import-ipynb in /media/chloe/New Volume/Chloe/chloebot/env36/lib/python3.6/site-packages (0.1.3)`
+
+This can be fixed by providing your python interpreter with the path-to-your-module,the path 
+
+`import sys`
+
+`sys.path.append('/media/carson/New Volume/Chloe/chloebot/env36/lib/python3.6/site-packages')` 
 
 ## How can I help you or get help from you?
 

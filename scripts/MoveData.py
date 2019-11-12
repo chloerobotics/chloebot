@@ -1,6 +1,5 @@
 import re
 import numpy as np
-#import spacy
 from nltk.tokenize import TweetTokenizer
 
 import torch
@@ -84,8 +83,7 @@ def json2datatools(path = None, tokenizer = None, opt = None):
     if tokenizer == None:
         tokenizer = Tokenizer()
         
-    input_field = data.Field(lower=True, tokenize=tokenizer.tokenize, 
-                            unk_token='<unk>', init_token='<sos>', eos_token='<eos>')
+    input_field = data.Field(lower=True, tokenize=tokenizer.tokenize)
     output_field = data.Field(lower=True, tokenize=tokenizer.tokenize, 
                             unk_token='<unk>', init_token='<sos>', eos_token='<eos>')
 
