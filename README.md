@@ -1,8 +1,8 @@
 # *chloe*
 
 
-<table><tr style="background:transparent;">
-<td><img width="200" height="200" src="https://venturebeat.com/wp-content/uploads/2019/06/pytorch.jpg">
+<table style="background:transparent;" ><tr>
+<td><img width="200" height="100" src="https://venturebeat.com/wp-content/uploads/2019/06/pytorch.jpg">
 </td>
 <td><img width="100" height="100" src="https://avatars3.githubusercontent.com/u/56938552?s=100&v=1"></td>
 </tr></table>
