@@ -1,4 +1,10 @@
-# *chloe*
+
+<table><tr>
+<td><h1><center><i>Chloebot</i>></center></h1></td>
+<td><img width="200" height="200" src="https://venturebeat.com/wp-content/uploads/2019/06/pytorch.jpg"></td>
+<td><img width="100" height="100" src="https://avatars3.githubusercontent.com/u/56938552?s=100&v=1"></td>
+</tr></table>
+
 
 <img src="https://raw.githubusercontent.com/dwyl/repo-badges/master/highresPNGs/start-with-why-HiRes.png" height="20" width="100">
 
