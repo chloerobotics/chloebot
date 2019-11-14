@@ -105,13 +105,15 @@ if you get a `ImportError: No module named` while at the saem time in your Termi
 
 `pip3 install import-ipynb`
 
-`Requirement already satisfied: import-ipynb in /media/chloe/New Volume/Chloe/chloebot/env36/lib/python3.6/site-packages (0.1.3)`
+
+`Requirement already satisfied: import-ipynb in /path/to/env/lib/python3.6/site-packages (0.1.3)`
+
 
 This can be fixed by providing your python interpreter with the path-to-your-module,the path 
 
 `import sys`
 
-`sys.path.append('/media/carson/New Volume/Chloe/chloebot/env36/lib/python3.6/site-packages')` 
+`sys.path.append('/path/to/env/lib/python3.6/site-packages')` 
 
 ## How can I help you or get help from you?
 
