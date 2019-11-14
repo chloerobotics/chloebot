@@ -44,7 +44,8 @@ Youre a noob? thats awesome!
 ## Table of Contents
 
 - [START_HERE](START_HERE.ipynb) introduction, summon and meet *chloe*
-- [TALK](notebooks/Talk.ipynb) tongue-tied, joint probability distribution and beam search **new under construction**
+- [Trainer](notebooks/Trainer.ipynb) Tokenization in Sequnce to Sequence learning, intuitive explaination of Loss Functions using a toy example of cross entropy  
+- [Building Blocks of Neural Networks](notebooks/Elements.ipynb) *under construction*
 - More on the way
 
 ## How to Start
