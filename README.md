@@ -1,10 +1,11 @@
 # *chloe*
 
 
-<table style="background:transparent;" ><tr>
+<table style="background:transparent; border: none" ><tr>
 <td><img width="200" height="100" src="https://venturebeat.com/wp-content/uploads/2019/06/pytorch.jpg">
 </td>
 <td><img width="100" height="100" src="https://avatars3.githubusercontent.com/u/56938552?s=100&v=1"></td>
+<td><img width="200" height="100" src="https://media.licdn.com/dms/image/C561BAQGOxKdaJY1ajA/company-background_10000/0?e=1573851600&v=beta&t=1TNBZhYRag7IDY814BeWcHHSIjyc55PeEBMkzS8EOYw"></td>
 </tr></table>
 
 
