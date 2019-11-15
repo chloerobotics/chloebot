@@ -28,6 +28,7 @@ class PositionalEncoder(nn.Module):
         self.register_buffer('pe', pe)
  
     def forward(self, x):
+        print('x.shape', x.shape)
         # make embeddings relatively larger
         x = x * math.sqrt(self.d_model)
         #add constant to embedding
