@@ -5,7 +5,7 @@
 <td style="background:transparent; border: none;"><img width="200" height="100" src="https://venturebeat.com/wp-content/uploads/2019/06/pytorch.jpg">
 </td>
 <td style="background:transparent; border: none;"><img width="100" height="100" src="https://avatars3.githubusercontent.com/u/56938552?s=100&v=1"></td>
-<td style="background:transparent; border: none;"><img width="300" height="100" src="saved/images/ChloeRobotics.png></td>
+<td style="background:transparent; border: none;"><img width="300" height="100" src="saved/images/ChloeRobotics.png"></td>
 </tr></table>
 
 
