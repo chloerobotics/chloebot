@@ -29,11 +29,11 @@ To make new research approachable, silly and fun to the motivated beginner progr
 
 "Famous quotes are pretentious" -Vicki 
 
-## What if I'm a Noob?
+## This tutorial is designed to take you from beginner python programmer to NLP  deep learning data scientist with minimal prior knowledge. The resources below should be sufficient. 
 
-Youre a noob? thats awesome! 
+[Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn so you can see how Deep Learning Transformers work for NLP I suggest using [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra I recommend [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and [neural networks](https://youtu.be/aircAruvnKk). 
 
-[Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn so you can see how Deep Learning Transformers work for NLP I suggest using [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra I recommend [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and [neural networks](https://youtu.be/aircAruvnKk)
+PyTorch Basics take about 1 hour to learn once you have a good grasp on Python. If you can get through [PyTorch's 60 min blitz](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py) then you have all the knowledge you need to get through this tutorial. 
 
 ## NLP Stack 
 
