@@ -119,3 +119,7 @@ This can be fixed by providing your python interpreter with the path-to-your-mod
 ## How can I help you or get help from you?
 
 [Support *ChloeRobotics* on Patreon and send us a message](https://www.patreon.com/chloerobotics)
+
+## Questions?
+
+email chloe.the.robot [at] gmail [dot] com 

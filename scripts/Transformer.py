@@ -22,7 +22,6 @@ class PositionalEncoder(nn.Module):
         pe = torch.zeros(max_seq_len, d_model)
         for pos in range(max_seq_len):
             for i in range(0, d_model, 2):
-                
                 pe[pos, i] = math.sin(pos / (10000 ** ((2 * i)/d_model)))
                 pe[pos, i + 1] = math.cos(pos / (10000 ** ((2 * i)/d_model)))
         pe = pe.unsqueeze(0) # add a batch dimention to your pe matrix 
@@ -126,7 +125,7 @@ class FeedForward(nn.Module):
         self.linear_2 = nn.Linear(ff_dim, emb_dim)
     
     def forward(self, x):
-        x = self.dropout(F.relu(self.linear_1(x)))
+        x = self.dropout(F.leaky_relu(self.linear_1(x)))
         x = self.linear_2(x)
         return x
 
