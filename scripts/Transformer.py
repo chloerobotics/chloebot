@@ -69,58 +69,49 @@ class Norm(nn.Module):
         norm = self.alpha * norm + self.bias
         return norm
 
-def attention(q, k, v, d_k, mask=None, dropout=None):
-    
-    scores = torch.matmul(q, k.transpose(-2, -1)) /  math.sqrt(d_k)
-    
-    if mask is not None:
-        mask = mask.unsqueeze(1)
-        scores = scores.masked_fill(mask == 0, -1e9)
-    
-    scores = F.softmax(scores, dim=-1)
-    
-    if dropout is not None:
-        scores = dropout(scores)
-        
-    output = torch.matmul(scores, v)
-    return output
-    
 class MultiHeadAttention(nn.Module):
     def __init__(self, heads, emb_dim, dropout = 0.1):
         super().__init__()
         
         self.emb_dim = emb_dim
-        self.k_dim = emb_dim // heads
+        self.dim_k = emb_dim // heads
         self.h = heads
-        
         self.q_linear = nn.Linear(emb_dim, emb_dim)
         self.v_linear = nn.Linear(emb_dim, emb_dim)
         self.k_linear = nn.Linear(emb_dim, emb_dim)
-        
         self.dropout = nn.Dropout(dropout)
         self.out = nn.Linear(emb_dim, emb_dim)
     
+    def attention(self, q, k, v, dim_k, mask=None, dropout=None):
+        scores = torch.matmul(q, k.transpose(-2, -1)) /  math.sqrt(dim_k)
+        if mask is not None:
+            mask = mask.unsqueeze(1)
+            scores = scores.masked_fill(mask == 0, -1e9)
+        scores = F.softmax(scores, dim=-1)
+        if dropout is not None:
+            scores = dropout(scores)
+        output = torch.matmul(scores, v)
+        return output
+    
     def forward(self, q, k, v, mask=None):
-        
+        '''
+        q,k,v are shape (batch size, sequence length, embedding dimensions)
+        source_mask of shape (batch size, 1, sequence length)
+        '''
         bs = q.size(0)
-        
         # perform linear operation and split into N heads
-        k = self.k_linear(k).view(bs, -1, self.h, self.k_dim)
-        q = self.q_linear(q).view(bs, -1, self.h, self.k_dim)
-        v = self.v_linear(v).view(bs, -1, self.h, self.k_dim)
-        
+        k = self.k_linear(k).view(bs, -1, self.h, self.dim_k)
+        q = self.q_linear(q).view(bs, -1, self.h, self.dim_k)
+        v = self.v_linear(v).view(bs, -1, self.h, self.dim_k)
         # transpose to get dimensions bs * N * sl * d_model
         k = k.transpose(1,2)
         q = q.transpose(1,2)
         v = v.transpose(1,2)
-        
-
         # calculate attention using function we will define next
-        scores = attention(q, k, v, self.k_dim, mask, self.dropout)
+        scores = self.attention(q, k, v, self.dim_k, mask, self.dropout)
         # concatenate heads and put through final linear layer
         concat = scores.transpose(1,2).contiguous().view(bs, -1, self.emb_dim)
         output = self.out(concat)
-    
         return output
 
 class FeedForward(nn.Module):
