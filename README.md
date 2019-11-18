@@ -35,6 +35,9 @@ To make new research approachable, silly and fun to the motivated beginner progr
 
 PyTorch Basics take about 1 hour to learn once you have a good grasp on Python. If you can get through [PyTorch's 60 min blitz](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py) then you have all the knowledge you need to get through this tutorial. 
 
+<img src="saved/images/talk.jpeg">
+<img src="saved/images/LossTopologyLesson.png"> 
+
 ## NLP Stack 
 
 - Python 3.6
