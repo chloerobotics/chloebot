@@ -1,15 +1,9 @@
 # *chloe*
 
-
-<table ><tr style="background:transparent; border: none;">
-<td style="background:transparent; border: none;"><img width="200" height="100" src="https://venturebeat.com/wp-content/uploads/2019/06/pytorch.jpg">
-</td>
-<td style="background:transparent; border: none;"><img width="100" height="100" src="https://avatars3.githubusercontent.com/u/56938552?s=100&v=1"></td>
-<td style="background:transparent; border: none;"><img width="300" height="100" src="saved/images/ChloeRobotics.png"></td>
-</tr></table>
-
-
 <img src="https://raw.githubusercontent.com/dwyl/repo-badges/master/highresPNGs/start-with-why-HiRes.png" height="20" width="100">
+
+<img src="saved/images/talktochloe.png">
+<img src="saved/images/losslesson.png">
 
 ## What is this?
 
@@ -17,26 +11,14 @@ Most AI research today is done by elite universities and corporate labs. The pur
 
 *chloe* is an end to end neural network chatbot written in PyTorch based on the transformer. Accomplishing goals through conversation is a task we can all relate to, thus chatbots are an ideal agent through which to connect new research to our current understanding of AI and demonstrate how new research brings us closer to human level intelligence or not
 
-To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics. 
+To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics.  
 
-## Our philosophies
-
-"The most beautiful experience we have is the mysterious. It is the  emotion that stands at the cradle of all art and science" -Albert Einstein
-
-"Anyone can cook" -that French chef from Ratatouille
-
-"Less bragging and flash, more science and math " -*chloe* 
-
-"Famous quotes are pretentious" -Vicki 
-
-## This tutorial is designed to take you from beginner python programmer to NLP  deep learning data scientist with minimal prior knowledge. The resources below should be sufficient. 
-
-[Python tutorials](https://www.learnpython.org/) are everywhere on the internet. If you want to learn so you can see how Deep Learning Transformers work for NLP I suggest using [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) like [this one](https://www.dataquest.io/blog/jupyter-notebook-tutorial/). For a visual intro to linear algebra I recommend [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) and [neural networks](https://youtu.be/aircAruvnKk). 
-
-PyTorch Basics take about 1 hour to learn once you have a good grasp on Python. If you can get through [PyTorch's 60 min blitz](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py) then you have all the knowledge you need to get through this tutorial. 
-
-<img src="saved/images/talktochloe.png">
-<img src="saved/images/losslesson.png"> 
+<table ><tr style="background:transparent; border: none;">
+<td style="background:transparent; border: none;"><img width="200" height="100" src="https://venturebeat.com/wp-content/uploads/2019/06/pytorch.jpg">
+</td>
+<td style="background:transparent; border: none;"><img width="100" height="100" src="https://avatars3.githubusercontent.com/u/56938552?s=100&v=1"></td>
+<td style="background:transparent; border: none;"><img width="300" height="100" src="saved/images/ChloeRobotics.png"></td>
+</tr></table>
 
 ## NLP Stack 
 
@@ -126,3 +108,21 @@ This can be fixed by providing your python interpreter with the path-to-your-mod
 ## Questions?
 
 email chloe.the.robot [at] gmail [dot] com 
+
+## Our philosophies
+
+"The most beautiful experience we have is the mysterious. It is the  emotion that stands at the cradle of all art and science" -Albert Einstein
+
+"Anyone can cook" -that French chef from Ratatouille
+
+"Less bragging and flash, more science and math " -*chloe* 
+
+"Famous quotes are pretentious" -Vicki 
+
+## Suggested resources for those new to python or deep learning 
+
+- [Python tutorials](https://www.learnpython.org/) 
+- [jupyter notebooks](https://youtu.be/pxPzuyCOoMI) 
+- [3Blue1Brown's Essence of linear algebra](https://youtu.be/fNk_zzaMoSs) 
+- [3Blue1Brown's Neural Networks](https://youtu.be/aircAruvnKk)
+- [PyTorch tutorial](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py) 
