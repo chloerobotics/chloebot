@@ -70,48 +70,72 @@ class Norm(nn.Module):
         return norm
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, heads, emb_dim, dropout = 0.1):
+    def __init__(self, num_heads, emb_dim, dim_k = None, dropout = 0.1):
         super().__init__()
         
         self.emb_dim = emb_dim
-        self.dim_k = emb_dim // heads
-        self.h = heads
-        self.q_linear = nn.Linear(emb_dim, emb_dim)
-        self.v_linear = nn.Linear(emb_dim, emb_dim)
-        self.k_linear = nn.Linear(emb_dim, emb_dim)
+        self.dim_k = dim_k if dim_k else emb_dim // num_heads
+        self.num_heads = num_heads
+        self.q_linear = nn.Linear(emb_dim, self.dim_k*num_heads)
+        self.v_linear = nn.Linear(emb_dim, self.dim_k*num_heads)
+        self.k_linear = nn.Linear(emb_dim, self.dim_k*num_heads)
         self.dropout = nn.Dropout(dropout)
-        self.out = nn.Linear(emb_dim, emb_dim)
+        self.out = nn.Linear(self.dim_k*num_heads,emb_dim)
     
-    def attention(self, q, k, v, dim_k, mask=None, dropout=None):
-        scores = torch.matmul(q, k.transpose(-2, -1)) /  math.sqrt(dim_k)
+    def attention(self, q, k, v, dim_k, mask=None, dropout=None, explain=False):
+        k = k.transpose(-2, -1)
+        if explain: print('q, k', q.shape, k.shape)
+        # matrix multiplication is done using the last two dimensions
+        # (batch_size,num_heads,seq_len,dim_k)X(batch_size,num_heads,dim_k,seq_len)
+        scores = torch.matmul(q, k) / math.sqrt(dim_k) # = (batch_size,num_heads,seq_len,seq_len)
         if mask is not None:
             mask = mask.unsqueeze(1)
             scores = scores.masked_fill(mask == 0, -1e9)
         scores = F.softmax(scores, dim=-1)
-        if dropout is not None:
-            scores = dropout(scores)
+        if explain: print('scores', scores.shape)
+        if dropout is not None: scores = dropout(scores)
+        # (batch_size,num_heads,seq_len,seq_len)X(batch_size,num_heads,seq_len,dim_k)
         output = torch.matmul(scores, v)
-        return output
+        return output # = (batch_size,num_heads,seq_len,dim_k)
     
-    def forward(self, q, k, v, mask=None):
+    def forward(self, q, k, v, mask=None, explain=False):
         '''
-        q,k,v are shape (batch size, sequence length, embedding dimensions)
-        source_mask of shape (batch size, 1, sequence length)
+        inputs:
+            q,k,v are shape (batch size, sequence length, embedding dimensions)
+            source_mask of shape (batch size, 1, sequence length)
+        outputs: sequence of vectors, re-represented using attention
+            shape (batch size, sequence length, embedding dimensions)
+        use:
+            the encoder layer places the same source vector sequence into q,k,v 
+            and source_mask into mask
+            the decoder layer uses this twice, once with decoder inputs as q,k,v 
+            and target mask as mask. then with decoder inputs as q, encoder outputs
+            as k, v and source mask as mask
         '''
-        bs = q.size(0)
-        # perform linear operation and split into N heads
-        k = self.k_linear(k).view(bs, -1, self.h, self.dim_k)
-        q = self.q_linear(q).view(bs, -1, self.h, self.dim_k)
-        v = self.v_linear(v).view(bs, -1, self.h, self.dim_k)
-        # transpose to get dimensions bs * N * sl * d_model
+        # k,q,v are each shape (batch size, sequence length, dim_k * num_heads)
+        batch_size = q.size(0)
+        k = self.k_linear(k)
+        q = self.q_linear(q)
+        v = self.v_linear(v)
+        if explain: print("(batch size, sequence length, dim_k * num_heads)", k.shape)
+        # k,q,v are each shape (batch size, sequence length, num_heads, dim_k)
+        k = k.view(batch_size,-1,self.num_heads,self.dim_k)
+        q = q.view(batch_size,-1,self.num_heads,self.dim_k)
+        v = v.view(batch_size,-1,self.num_heads,self.dim_k)
+        # transpose to shape (batch_size, num_heads, sequence length, dim_k)
         k = k.transpose(1,2)
         q = q.transpose(1,2)
         v = v.transpose(1,2)
+        if explain: print("(batch_size,num_heads,seq_length,dim_k)",k.shape)
         # calculate attention using function we will define next
-        scores = self.attention(q, k, v, self.dim_k, mask, self.dropout)
-        # concatenate heads and put through final linear layer
-        concat = scores.transpose(1,2).contiguous().view(bs, -1, self.emb_dim)
+        attn = self.attention(q, k, v, self.dim_k, mask, self.dropout, explain)
+        if explain: print("attn(batch_size,num_heads,seq_length,dim_k)", attn.shape)
+        # concatenate heads and 
+        concat=attn.transpose(1,2).contiguous().view(batch_size,-1,self.dim_k*self.num_heads)
+        if explain: print("concat.shape", concat.shape)
+        # put through final linear layer
         output = self.out(concat)
+        if explain: print("output", output.shape)
         return output
 
 class FeedForward(nn.Module):
