@@ -7,7 +7,7 @@
 
 ## What is this?
 
-Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows  
+Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows. *chloe* is part educational tool, part research project  
 
 *chloe* is an end to end neural network chatbot written in PyTorch based on the transformer. Accomplishing goals through conversation is a task we can all relate to, thus chatbots are an ideal agent through which to connect new research to our current understanding of AI and demonstrate how new research brings us closer to human level intelligence or not
 
@@ -31,8 +31,9 @@ To make new research approachable, silly and fun to the motivated beginner progr
 
 - [START_HERE](START_HERE.ipynb) introduction, summon and meet *chloe*
 - [Trainer](notebooks/Trainer.ipynb) Tokenization in Sequnce to Sequence learning, intuitive explaination of Loss Functions using a toy example of cross entropy  
-- [Building Blocks of Neural Networks](notebooks/Elements.ipynb) *under construction*
-- More on the way
+- [Building Blocks of Neural Networks](notebooks/Elements.ipynb) Word Vector Embeddings, Positional Encoding, Neural Networks, Attention, Masking 
+- [The Network Architecture](notebooks/EncoderDecoder.ipynb) Assembling the building blocks into an encoder and decoder
+- [The Agent](notebooks/Talk.ipynb) The Neural Network as an agent **under construction**
 
 ## How to Start
 

@@ -76,9 +76,10 @@ class MultiHeadAttention(nn.Module):
         self.emb_dim = emb_dim
         self.dim_k = dim_k if dim_k else emb_dim // num_heads
         self.num_heads = num_heads
-        self.q_linear = nn.Linear(emb_dim, self.dim_k*num_heads)
-        self.v_linear = nn.Linear(emb_dim, self.dim_k*num_heads)
-        self.k_linear = nn.Linear(emb_dim, self.dim_k*num_heads)
+        self.q_linear = nn.Linear(emb_dim,self.dim_k*num_heads)
+        self.k_linear = nn.Linear(emb_dim,self.dim_k*num_heads)
+        self.v_linear = nn.Linear(emb_dim,self.dim_k*num_heads)
+
         self.dropout = nn.Dropout(dropout)
         self.out = nn.Linear(self.dim_k*num_heads,emb_dim)
     
@@ -87,16 +88,17 @@ class MultiHeadAttention(nn.Module):
         if explain: print('q, k', q.shape, k.shape)
         # matrix multiplication is done using the last two dimensions
         # (batch_size,num_heads,seq_len,dim_k)X(batch_size,num_heads,dim_k,seq_len)
-        scores = torch.matmul(q, k) / math.sqrt(dim_k) # = (batch_size,num_heads,seq_len,seq_len)
+        scores = torch.matmul(q, k) / math.sqrt(dim_k) #(batch_size,num_heads,seq_len,seq_len)
+        if explain: print('scores.shape', scores.shape)
         if mask is not None:
             mask = mask.unsqueeze(1)
-            scores = scores.masked_fill(mask == 0, -1e9)
-        scores = F.softmax(scores, dim=-1)
-        if explain: print('scores', scores.shape)
-        if dropout is not None: scores = dropout(scores)
-        # (batch_size,num_heads,seq_len,seq_len)X(batch_size,num_heads,seq_len,dim_k)
-        output = torch.matmul(scores, v)
-        return output # = (batch_size,num_heads,seq_len,dim_k)
+            scores = scores.masked_fill(mask == 0, -1e9) 
+        softscores = F.softmax(scores, dim=-1)
+        if dropout is not None: softscores = dropout(softscores)
+            
+        #(batch_size,num_heads,seq_len,seq_len)X(batch_size,num_heads,seq_len,dim_k)
+        output = torch.matmul(softscores, v)
+        return output, scores #=(batch_size,num_heads,seq_len,dim_k)
     
     def forward(self, q, k, v, mask=None, explain=False):
         '''
@@ -114,8 +116,8 @@ class MultiHeadAttention(nn.Module):
         '''
         # k,q,v are each shape (batch size, sequence length, dim_k * num_heads)
         batch_size = q.size(0)
-        k = self.k_linear(k)
         q = self.q_linear(q)
+        k = self.k_linear(k)
         v = self.v_linear(v)
         if explain: print("(batch size, sequence length, dim_k * num_heads)", k.shape)
         # k,q,v are each shape (batch size, sequence length, num_heads, dim_k)
@@ -128,15 +130,15 @@ class MultiHeadAttention(nn.Module):
         v = v.transpose(1,2)
         if explain: print("(batch_size,num_heads,seq_length,dim_k)",k.shape)
         # calculate attention using function we will define next
-        attn = self.attention(q, k, v, self.dim_k, mask, self.dropout, explain)
+        attn, scores = self.attention(q, k, v, self.dim_k, mask, self.dropout, explain)
         if explain: print("attn(batch_size,num_heads,seq_length,dim_k)", attn.shape)
         # concatenate heads and 
         concat=attn.transpose(1,2).contiguous().view(batch_size,-1,self.dim_k*self.num_heads)
         if explain: print("concat.shape", concat.shape)
         # put through final linear layer
         output = self.out(concat)
-        if explain: print("output", output.shape)
-        return output
+        if explain: print("MultiHeadAttention output.shape", output.shape)
+        return output, scores
 
 class FeedForward(nn.Module):
     def __init__(self, emb_dim, ff_dim=2048, dropout = 0.1):
@@ -162,12 +164,20 @@ class EncoderLayer(nn.Module):
         self.ff = FeedForward(emb_dim, dropout=dropout)
         self.dropout_2 = nn.Dropout(dropout)
         
-    def forward(self, x, mask):
-        x2 = self.norm_1(x)
-        x = x + self.dropout_1(self.attn(x2,x2,x2,mask))
-        x2 = self.norm_2(x)
-        x = x + self.dropout_2(self.ff(x2))
-        return x
+    def forward(self, vector_sequence, mask):
+        '''
+        input:
+            vector_sequence of shape (batch size, sequence length, embedding dimensions)
+            source_mask (mask over input sequence) of shape (batch size, 1, sequence length)
+        output: sequence of vectors after embedding, postional encoding, attention and normalization
+            shape (batch size, sequence length, embedding dimensions)
+        '''
+        x2 = self.norm_1(vector_sequence)
+        x2_attn, x2_scores = self.attn(x2,x2,x2,mask)
+        vector_sequence = vector_sequence + self.dropout_1(x2_attn)
+        x2 = self.norm_2(vector_sequence)
+        vector_sequence = vector_sequence + self.dropout_2(self.ff(x2))
+        return vector_sequence
 
 class Encoder(nn.Module):
     def __init__(self, vocab_size, emb_dim, n_layers, heads, dropout):
@@ -180,19 +190,20 @@ class Encoder(nn.Module):
     def forward(self, source_sequence, source_mask):
         '''
         input:
-        source_sequence (sequence of source tokens) of shape (batch size, sequence length)
-        source_mask (mask over input sequence) of shape (batch size, 1, sequence length)
-        output: x.shape after layers and after norm both are of shape
-        (batch size, sequence length, embedding dimensions)
+            source_sequence (sequence of source tokens) of shape (batch size, sequence length)
+            source_mask (mask over input sequence) of shape (batch size, 1, sequence length)
+        output: sequence of vectors after embedding, postional encoding, attention and normalization
+            shape (batch size, sequence length, embedding dimensions)
         '''
-        x = self.embed(source_sequence)
-        x = self.pe(x)
+        vector_sequence = self.embed(source_sequence)
+        vector_sequence = self.pe(vector_sequence)
         for i in range(self.n_layers):
-            x = self.layers[i](x, source_mask)
-        x = self.norm(x)
-        return x
+            vector_sequence = self.layers[i](vector_sequence, source_mask)
+        vector_sequence = self.norm(vector_sequence)
+        return vector_sequence
 
 class DecoderLayer(nn.Module):
+
     def __init__(self, emb_dim, heads, dropout=0.1):
         super().__init__()
         self.norm_1 = Norm(emb_dim)
@@ -207,16 +218,36 @@ class DecoderLayer(nn.Module):
         self.attn_2 = MultiHeadAttention(heads, emb_dim, dropout=dropout)
         self.ff = FeedForward(emb_dim, dropout=dropout)
 
-    def forward(self, x, e_outputs, src_mask, trg_mask):
-        x2 = self.norm_1(x)
-        x = x + self.dropout_1(self.attn_1(x2, x2, x2, trg_mask))
-        x2 = self.norm_2(x)
-        x = x + self.dropout_2(self.attn_2(x2, e_outputs, e_outputs, src_mask))
-        x2 = self.norm_3(x)
-        x = x + self.dropout_3(self.ff(x2))
-        return x
+    def forward(self, de_out, en_out, src_mask, trg_mask):
+        '''
+        inputs:
+            de_out (decoder ouputs so far) (batch size, output sequence length + 1, embedding dimensions)
+            en_out (encoder output) (batch size, input sequence length, embedding dimensions)
+            src_mask (batch size, 1, input sequence length)
+            trg_mask (batch size, output sequence length + 1, output sequence length + 1)
+            
+        ouputs:
+            de_out (next decoder output) (batch size, output sequence length + 1, embedding dimensions)
+        '''
+        de_nrm = self.norm_1(de_out)
+        self_attn, self_scores = self.attn_1(de_nrm, de_nrm, de_nrm, trg_mask)#Self Attention 
+        de_out = de_out + self.dropout_1(self_attn)
+        de_nrm = self.norm_2(de_out)
+        en_attn, en_scores = self.attn_2(de_nrm, en_out, en_out, src_mask)#Encoder Attention 
+        de_out = de_out + self.dropout_2(en_attn)
+        de_nrm = self.norm_3(de_out)
+        de_out = de_out + self.dropout_3(self.ff(de_nrm))
+        return de_out
 
 class Decoder(nn.Module):
+    '''
+    If your target sequence is `see` `ya` and you want to train on the entire 
+    sequence against the target, you would use `<sos>` `see`  `ya`
+    as the de_out (decoder ouputs so far) and compare the 
+    output de_out (next decoder output) `see` `ya` `<eos>` 
+    as the target in the loss function. The inclusion of the `<sos>`
+    for the (decoder ouputs so far) and `<eos>` for the 
+    '''
     def __init__(self, vocab_size, emb_dim, n_layers, heads, dropout):
         super().__init__()
         self.n_layers = n_layers
@@ -225,6 +256,16 @@ class Decoder(nn.Module):
         self.layers = get_clones(DecoderLayer(emb_dim, heads, dropout), n_layers)
         self.norm = Norm(emb_dim)
     def forward(self, trg, e_outputs, src_mask, trg_mask):
+        '''
+        inputs:
+            de_out (decoder ouputs so far) (batch size, output sequence length + 1)
+            en_out (encoder output) (batch size, sequence length, embedding dimensions)
+            src_mask (batch size, 1, input sequence length)
+            trg_mask (batch size, output sequence length + 1, output sequence length + 1)
+            
+        ouputs:
+            de_out (next decoder output) (batch size, output sequence length + 1, embedding dimensions)
+        '''
         x = self.embed(trg)
         x = self.pe(x)
         for i in range(self.n_layers):
