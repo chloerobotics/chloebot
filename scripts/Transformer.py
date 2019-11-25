@@ -255,7 +255,7 @@ class Decoder(nn.Module):
         self.pe = PositionalEncoder(emb_dim, dropout=dropout)
         self.layers = get_clones(DecoderLayer(emb_dim, heads, dropout), n_layers)
         self.norm = Norm(emb_dim)
-    def forward(self, trg, e_outputs, src_mask, trg_mask):
+    def forward(self, de_out, en_out, src_mask, trg_mask):
         '''
         inputs:
             de_out (decoder ouputs so far) (batch size, output sequence length + 1)
@@ -266,10 +266,10 @@ class Decoder(nn.Module):
         ouputs:
             de_out (next decoder output) (batch size, output sequence length + 1, embedding dimensions)
         '''
-        x = self.embed(trg)
+        x = self.embed(de_out)
         x = self.pe(x)
         for i in range(self.n_layers):
-            x = self.layers[i](x, e_outputs, src_mask, trg_mask)
+            x = self.layers[i](x, en_out, src_mask, trg_mask)
         return self.norm(x)
 
 class Transformer(nn.Module):
