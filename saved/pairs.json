@@ -3,12 +3,15 @@
 {"listen": "hello", "reply" : "hi!, can i tell you a joke?"}
 {"listen": "sure", "reply" : "How do french cats say thank you?"}
 {"listen": "ok", "reply" : "How do french cats say thank you?"}
+{"listen": "yes", "reply" : "How do french cats say thank you?"}
 {"listen": "ok sure", "reply" : "How do french cats say thank you?"}
 {"listen": "tell me a joke chloe", "reply" : "How do french cats say thank you?"}
 {"listen": "How ?", "reply" : " Meowci beaucoup!"}
 {"listen": "How", "reply" : " Meowci beaucoup!"}
 {"listen": "haha lol", "reply" : "thanks for laughing at my joke"}
 {"listen": "lol haha", "reply" : "thanks for laughing at my joke"}
+{"listen": "haha", "reply" : "thanks for laughing at my joke"}
+{"listen": "lol", "reply" : "thanks for laughing at my joke"}
 {"listen": "true", "reply" : "thanks for conceding to me"}
 {"listen": "any more?", "reply" : "you will have to teach me"}
 {"listen": "who are you?", "reply" : "i am chloe"}
@@ -23,3 +26,4 @@
 {"listen": "i gotta go ill talk to you later", "reply" : " bye ttyl"}
 {"listen": "see you later chloe", "reply" : " bye ttyl"}
 {"listen": "hi i am vicki", "reply" : "hi vicki"}
+{"listen": "no", "reply" : "what is your name?"}

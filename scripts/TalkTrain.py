@@ -6,6 +6,7 @@ from nltk.corpus import wordnet
 import torch
 from torch.autograd import Variable
 import torch.nn.functional as F
+from torch.distributions.categorical import Categorical
 
 def num_batches(train):
 
@@ -38,116 +39,75 @@ def create_masks(src, trg, opt):
         trg_mask = None
     return src_mask, trg_mask
 
-def talk_to_model(sentence, model, opt, SRC, TRG, explain=False):
-    try:
-        model.eval()
-        indexed = []
-        sentence = SRC.preprocess(sentence)
-        for tok in sentence:
-            if SRC.vocab.stoi[tok] != 0:
-                indexed.append(SRC.vocab.stoi[tok])
-            else:
-                indexed.append(get_synonym(tok, SRC))
-        sentence = Variable(torch.LongTensor([indexed]))
+def string2tensor(string, inputfield, explain=False):
+    '''
+    input:
+        string (str) input sentence
+        inputfield a PyTorch torchtext.data.Field object
+        explain, set this to True if you want to see how the sentence was split 
+    output:
+        sequence of tokens (torch tensor of integers) shape  
+    '''
+    sentence = inputfield.preprocess(string)
+    if explain: print(sentence)
+    integer_sequence = []
+    for tok in sentence:
+        if inputfield.vocab.stoi[tok] != 0:
+            integer_sequence.append(inputfield.vocab.stoi[tok])
+        else:
+            integer_sequence.append(get_synonym(tok, inputfield))
+    return torch.LongTensor([integer_sequence])
 
-        if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
-            sentence = sentence.cuda()
-
-        sentence = beam_search(sentence, model, SRC, TRG, opt)
-        return multiple_replace({' ?' : '?',' !':'!',' .':'.','\' ':'\'',' ,':','}, sentence)
-    except Exception as e:
-        if explain: print(e)
-        return "haha, got me, you will have to teach me how to reply to that, I haven't learned yet"
-
-def get_synonym(word, SRC):
+def get_synonym(word, field, explain=False):
     syns = wordnet.synsets(word)
     for s in syns:
+        if explain: print('synonym:', s.name())
         for l in s.lemmas():
-            if SRC.vocab.stoi[l.name()] != 0:
-                return SRC.vocab.stoi[l.name()]
-    return 0
+            if explain: print('-lemma:', l.name())
+            if field.vocab.stoi[l.name()] != 0:
+                if explain: print('found in vocab', l.name())
+                return field.vocab.stoi[l.name()]
+    return 0 # if we cannot find a synonym, return 0
 
-def beam_search(src, model, SRC, TRG, opt):
-    #print(next(model.parameters()).is_cuda,src.is_cuda)
-    outputs, e_outputs, log_scores = init_vars(src, model, SRC, TRG, opt)
-    #e_outputs.shape [batch_size, seq_len, emd_dim] print(outputs, e_outputs.shape, log_scores)
-    eos_tok = TRG.vocab.stoi['<eos>']
-    src_mask = (src != SRC.vocab.stoi['<pad>']).unsqueeze(-2)
-    ind = None
-    for i in range(2, opt.max_len):
-        trg_mask = nopeak_mask(i, opt)
-        out = model.out(model.decoder(outputs[:,:i], e_outputs, src_mask, trg_mask))
-        out = F.softmax(out, dim=-1)
-        outputs, log_scores = k_best_outputs(outputs, out, log_scores, i, opt.k)
-        ones = (outputs==eos_tok).nonzero() # Occurrences of end symbols for all input sentences.
-        sentence_lengths = torch.zeros(len(outputs), dtype=torch.long)
-
-        if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
-            sentence_lengths = sentence_lengths.cuda()
-
-        for vec in ones:
-            i = vec[0]
-            if sentence_lengths[i]==0: # First end symbol has not been found yet
-                sentence_lengths[i] = vec[1] # Position of first end symbol
-        num_finished_sentences = len([s for s in sentence_lengths if s > 0])
-        if num_finished_sentences == opt.k:
-            alpha = 0.7
-            div = 1/(sentence_lengths.type_as(log_scores)**alpha)
-            _, ind = torch.max(log_scores * div, 1)
-            ind = ind.data[0]
-            break
-    if ind is None:
-        #print(outputs[0]==eos_tok)
-        #print((outputs[0]==eos_tok).nonzero())
-        length = (outputs[0]==eos_tok).nonzero()[0]
-        return ' '.join([TRG.vocab.itos[tok] for tok in outputs[0][1:length]])
-    else:
-        length = (outputs[ind]==eos_tok).nonzero()[0]
-        return ' '.join([TRG.vocab.itos[tok] for tok in outputs[ind][1:length]])
-
-def k_best_outputs(outputs, out, log_scores, i, k):
-    probs, ix = out[:, -1].data.topk(k)
-    log_probs = torch.Tensor([math.log(p) for p in probs.data.view(-1)]).view(k, -1) + log_scores.transpose(0,1)
-    k_probs, k_ix = log_probs.view(-1).topk(k)
-    row = k_ix // k
-    col = k_ix % k
-    outputs[:, :i] = outputs[row, :i]
-    outputs[:, i] = ix[row, col]
-    log_scores = k_probs.unsqueeze(0)
-    return outputs, log_scores
-
-def init_vars(src, model, SRC, TRG, opt):
-    init_tok = TRG.vocab.stoi['<sos>']
-    src_mask = (src != SRC.vocab.stoi['<pad>']).unsqueeze(-2)
-    #print(next(model.parameters()).is_cuda,src.is_cuda,src_mask.is_cuda)
-    e_output = model.encoder(src, src_mask)
-    outputs = torch.LongTensor([[init_tok]])
-    if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
-        outputs = outputs.cuda()
-    trg_mask = nopeak_mask(1, opt)
-    out = model.out(model.decoder(outputs, e_output, src_mask, trg_mask))
-    out = F.softmax(out, dim=-1)
-    #print(out.shape)
-    probs, ix = out[:, -1].data.topk(opt.k)
-    #print('probs, ix',probs, ix)
-    log_scores = torch.Tensor([math.log(prob) for prob in probs.data[0]]).unsqueeze(0)
-    #print(log_scores)
-    outputs = torch.zeros(opt.k, opt.max_len).long()
-    if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
-        outputs = outputs.cuda()
-    outputs[:, 0] = init_tok
-    outputs[:, 1] = ix[0]
-    e_outputs = torch.zeros(opt.k, e_output.size(-2),e_output.size(-1))
-    if opt.device == torch.device("cuda:0") and next(model.parameters()).is_cuda:
-        e_outputs = e_outputs.cuda()
-    e_outputs[:, :] = e_output[0]
-    return outputs, e_outputs, log_scores
-
-def multiple_replace(dict, text):
-  # Create a regular expression from the dictionary keys
-  regex = re.compile("(%s)" % "|".join(map(re.escape, dict.keys())))
-  # For each match, look-up corresponding value in dictionary
-  return regex.sub(lambda mo: dict[mo.string[mo.start():mo.end()]], text)
+def talk_to_chloe(input_str, model, opt, infield, outfield):
+    '''
+    input:
+        input_str is a string, it is what you want to say to the dialogue model
+        model is a Transformer model with encoder, decoder and a last layer linear transformation
+        opt is an options object with the maximum length of the output sequence opt.max_len
+        infield and outfield are the data.fields that store the vocabulary
+    output:
+        an output string response from the dialogue model
+    
+    Note: this version assumes we are evaluating the model on CPU 
+    '''
+    model.eval()
+    model.cpu()
+    input_sequence = string2tensor(input_str, infield) # string to tensor 
+    input_mask = (input_sequence != infield.vocab.stoi['<pad>']).unsqueeze(-2) #make input mask
+    encoding = model.encoder(input_sequence, input_mask) # use the encoder rerepresent the input
+    init_tok = outfield.vocab.stoi['<sos>'] # this is the integer for the start token
+    decoder_input = torch.LongTensor([[init_tok]]) # use start token to initiate the decoder
+    
+    # continue obtaining the next decoder token until decoder outputs and end token or til max_len 
+    for pos in range(opt.max_len):
+        decoder_input_mask = nopeak_mask(size=pos+1, opt=opt) # make target mask
+        # the out vector contains the logits that are rebalanced by the softmax
+        out = model.out(model.decoder(decoder_input, encoding, input_mask, decoder_input_mask))
+        softout = F.softmax(out, dim=-1) 
+        #softout is a categorical probability distribution over the output vocab
+        distr = Categorical(probs=softout)
+        action = distr.sample()[:,-1].unsqueeze(0) # sample from that distribution to get next token
+        # concatenate that token to our running list of output tokens 
+        decoder_input = torch.cat((decoder_input, action), dim=1) 
+        # if the model outputs an end of sentence token, it is done with this sentence
+        if outfield.vocab.itos[action] == '<eos>':
+            # [1:-1] excludes the start and end token from the output string 
+            de_str = ' '.join([outfield.vocab.itos[tok] for tok in decoder_input[0][1:-1]])
+            return de_str
+        
+    de_str = ' '.join([outfield.vocab.itos[tok] for tok in decoder_input[0]])
+    return de_str
 
 def trainer(model, data_iterator, options, optimizer, scheduler):
 
