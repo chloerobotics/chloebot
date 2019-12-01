@@ -33,7 +33,8 @@ To make new research approachable, silly and fun to the motivated beginner progr
 - [Trainer](notebooks/Trainer.ipynb) Tokenization in Sequnce to Sequence learning, intuitive explaination of Loss Functions using a toy example of cross entropy  
 - [Building Blocks of Neural Networks](notebooks/Elements.ipynb) Word Vector Embeddings, Positional Encoding, Neural Networks, Attention, Masking 
 - [The Network Architecture](notebooks/EncoderDecoder.ipynb) Assembling the building blocks into an encoder and decoder
-- [The Agent](notebooks/Talk.ipynb) The Neural Network as an agent **under construction**
+- [Talk](notebooks/Talk.ipynb) How chloe chooses which words to say in a sentence and some basic probability
+- [Memory](notebooks/Memory.ipynb) give chloe a memory module **under construction**
 
 ## How to Start
 
