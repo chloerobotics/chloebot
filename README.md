@@ -7,9 +7,13 @@
 
 ## What is this?
 
-Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows. *chloe* is part educational tool, part research project  
+My research interest is in incorporating the the latest research in deep natural language processing, deep reinforcement learning, computer vision and neuroscience to reality check our progress towards human level artificial intelligence. Not through benchmarks on competitive datasets, but through palpable human interaction such as fully neural network based conversational dialogue. Progress in this domain would be meaningful because it could demonstrate that artificial neural networks can represent the hallmarks of intelligent conversation: using symbols and logic or producing explanations and questions.  
 
 *chloe* is an end to end neural network chatbot written in PyTorch based on the transformer. Accomplishing goals through conversation is a task we can all relate to, thus chatbots are an ideal agent through which to connect new research to our current understanding of AI and demonstrate how new research brings us closer to human level intelligence or not
+
+## Why the playful, conversational yet overexplained style of writing? 
+
+Most AI research today is done by elite universities and corporate labs. The pursuit of science and creativity should be a viable project for any person, from any walk of life, who is excited by that feeling of mystery and building something that grows. *chloe* is part educational tool, part research project 
 
 To make new research approachable, silly and fun to the motivated beginner programmer  with at least a high school calculus level of math, we will be building chloe from the basics, from linear algebra, probabilty theory, etc, all the way to the latest AI research, at each step putting our learning into *chloe* so we remember it forever. *chloe* is built from modules that are thoroughly explained and demonstrated using jupyter notebooks and toy examples that build from these basics.  
 
