@@ -134,11 +134,11 @@ def trainer(model, data_iterator, options, optimizer, scheduler):
                                          ys, ignore_index = options.trg_pad)
             batch_loss.backward()
             optimizer.step()
-            scheduler.step()
-
             total_loss += batch_loss.item()
 
         epoch_loss = total_loss/(num_batches(data_iterator)+1)
+        scheduler.step(epoch_loss)
+
         if epoch_loss < best_loss:
             best_loss = epoch_loss
             torch.save(model.state_dict(), options.save_path)
@@ -149,8 +149,8 @@ def trainer(model, data_iterator, options, optimizer, scheduler):
 
 class CosineWithRestarts(torch.optim.lr_scheduler._LRScheduler):
     """
-    Cosine annealing with restarts.
-
+    Cosine annealing with restarts. 
+    #scheduler = CosineWithRestarts(optimizer, T_max=num_batches(data_iter))
     Parameters
     ----------
     optimizer : torch.optim.Optimizer

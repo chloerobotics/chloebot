@@ -103,14 +103,15 @@ class MultiHeadAttention(nn.Module):
     def forward(self, q, k, v, mask=None, explain=False):
         '''
         inputs:
-            q,k,v are shape (batch size, sequence length, embedding dimensions)
+            q has shape (batch size, q_sequence length, embedding dimensions)
+            k,v are shape (batch size, kv_sequence length, embedding dimensions)
             source_mask of shape (batch size, 1, sequence length)
         outputs: sequence of vectors, re-represented using attention
-            shape (batch size, sequence length, embedding dimensions)
+            shape (batch size, q_sequence length, embedding dimensions)
         use:
-            the encoder layer places the same source vector sequence into q,k,v 
-            and source_mask into mask
-            the decoder layer uses this twice, once with decoder inputs as q,k,v 
+            The encoder layer places the same source vector sequence into q,k,v 
+            and source_mask into mask.
+            The decoder layer uses this twice, once with decoder inputs as q,k,v 
             and target mask as mask. then with decoder inputs as q, encoder outputs
             as k, v and source mask as mask
         '''
