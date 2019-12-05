@@ -28,3 +28,7 @@
 {"listen": "see you later chloe", "reply" : " bye ttyl"}
 {"listen": "hi i am vicki", "reply" : "hi vicki"}
 {"listen": "no", "reply" : "what is your name?"}
+{"listen":"my name is fluffy", "reply":"hello fluffy!"}
+{"listen":"what is my name?", "reply":"its fluffy silly"}
+{"listen":"my name is snuggles", "reply":"hello snuggles!"}
+{"listen":"what is my name?", "reply":"its snuggles silly"}

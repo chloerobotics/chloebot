@@ -10,12 +10,11 @@ from torchtext import data
 
 class Options:
     def __init__(self, batchsize=4, device=-1, epochs=20, lr=0.01, 
-                 beam_width=2, max_len=20, save_path='saved/weights/model_weights'):
+                 max_len=20, save_path='saved/weights/model_weights'):
         self.batchsize = batchsize
         self.device = device
         self.epochs = epochs
         self.lr = lr
-        self.k = beam_width
         self.max_len = max_len
         self.save_path = save_path
 
@@ -27,7 +26,8 @@ class Tokenizer(object):
             
     def tokenize(self, sentence):
         sentence = re.sub(
-        r"[\*\"“”\n\\…\+\-\/\=\(\)‘•:\[\]\|’\!;]", " ", str(sentence))
+        r"[\*\"“”\n\\…\+\-\/\=\(\)‘•:\[\]\|’\;]", " ", str(sentence))
+        #r"[\*\"“”\n\\…\+\-\/\=\(\)‘•:\[\]\|’\!;]", " ", str(sentence))
         sentence = re.sub(r"[ ]+", " ", sentence)
         sentence = re.sub(r"\!+", "!", sentence)
         sentence = re.sub(r"\,+", ",", sentence)
@@ -101,4 +101,14 @@ def json2datatools(path = None, tokenizer = None, opt = None):
     opt.trg_pad = output_field.vocab.stoi['<pad>']
     return training_iterator, input_field, output_field, opt
 
-
+def load_subset_weights(whole_model, opt):
+    '''
+    This function allows you to load saved weights from a saved model that is a subset of your model
+    It looks for the named parameters that match and loads those but will not crash trying to load
+    parameters that dont have a matching name
+    '''
+    subset_model_dict = torch.load(opt.save_path)
+    whole_model_dict = whole_model.state_dict() 
+    for name, param in whole_model_dict.items(): 
+        if name in subset_model_dict:
+            whole_model_dict[name].copy_(subset_model_dict[name])

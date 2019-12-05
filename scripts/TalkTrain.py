@@ -91,7 +91,7 @@ def talk_to_chloe(input_str, model, opt, infield, outfield):
     
     # continue obtaining the next decoder token until decoder outputs and end token or til max_len 
     for pos in range(opt.max_len):
-        decoder_input_mask = nopeak_mask(size=pos+1, opt=opt) # make target mask
+        decoder_input_mask = nopeak_mask(size=pos+1, opt=opt) # make target mask, pos+1 casue pos starts at 0
         # the out vector contains the logits that are rebalanced by the softmax
         out = model.out(model.decoder(decoder_input, encoding, input_mask, decoder_input_mask))
         softout = F.softmax(out, dim=-1) 
@@ -102,6 +102,7 @@ def talk_to_chloe(input_str, model, opt, infield, outfield):
         decoder_input = torch.cat((decoder_input, action), dim=1) 
         # if the model outputs an end of sentence token, it is done with this sentence
         if outfield.vocab.itos[action] == '<eos>':
+            # [0] because we are assuming batch size of 1 
             # [1:-1] excludes the start and end token from the output string 
             de_str = ' '.join([outfield.vocab.itos[tok] for tok in decoder_input[0][1:-1]])
             return de_str
