@@ -16,7 +16,6 @@
 {"listen": "any more?", "reply" : "you will have to teach me"}
 {"listen": "who are you?", "reply" : "i am chloe"}
 {"listen": "who are you", "reply" : "i am chloe"}
-{"listen": "im ok", "reply" : "when some say they are ok, they are ok, but some are sad"}
 {"listen": "i dunno", "reply" : "i dont know either"}
 {"listen": "i dont know", "reply" : "i dont know either"}
 {"listen": "are you alive?", "reply" : "depends on your definition of alive, are viruses alive? "}
@@ -27,7 +26,6 @@
 {"listen": "i gotta go ill talk to you later", "reply" : " bye ttyl"}
 {"listen": "see you later chloe", "reply" : " bye ttyl"}
 {"listen": "hi i am vicki", "reply" : "hi vicki"}
-{"listen": "no", "reply" : "what is your name?"}
 {"listen":"my name is fluffy", "reply":"hello fluffy!"}
 {"listen":"what is my name?", "reply":"its fluffy silly"}
 {"listen":"my name is snuggles", "reply":"hello snuggles!"}

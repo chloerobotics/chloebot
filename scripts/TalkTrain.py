@@ -93,7 +93,7 @@ def talk_to_chloe(input_str, model, opt, infield, outfield):
     for pos in range(opt.max_len):
         decoder_input_mask = nopeak_mask(size=pos+1, opt=opt) # make target mask, pos+1 casue pos starts at 0
         # the out vector contains the logits that are rebalanced by the softmax
-        out = model.out(model.decoder(decoder_input, encoding, input_mask, decoder_input_mask))
+        out = model.out(model.decoder(decoder_input, decoder_input_mask, encoding, input_mask))
         softout = F.softmax(out, dim=-1) 
         #softout is a categorical probability distribution over the output vocab
         distr = Categorical(probs=softout)
@@ -128,7 +128,7 @@ def trainer(model, data_iterator, options, optimizer, scheduler):
             trg = batch.reply.transpose(0,1)
             trg_input = trg[:, :-1]
             src_mask, trg_mask = create_masks(src, trg_input, options)
-            preds = model(src, trg_input, src_mask, trg_mask)
+            preds = model(src, src_mask, trg_input, trg_mask)
             ys = trg[:, 1:].contiguous().view(-1)
             optimizer.zero_grad()
             batch_loss = F.cross_entropy(preds.view(-1, preds.size(-1)), 
