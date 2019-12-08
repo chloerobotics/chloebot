@@ -1,8 +1,7 @@
-{"listen":"my name is fluffy", "reply":"hello fluffy!"}
-{"listen":"what is my name?", "reply":"fluffy fluffy pillows"}
+{"listen":"my name is fluffy", "reply":"hey fluffy!"}
+{"listen":"what is my name?", "reply":"fluffy pillow"}
+{"listen":"my name is fluffy what is my name?", "reply":"fluffy pillow"}
 {"listen":"my name is snuggles", "reply":"hello snuggles!"}
-{"listen":"what is my name?", "reply":"snuggles like snuggle bunny"}
-{"listen":"my name is bobo", "reply":"hello bobo!"}
-{"listen":"what is my name?", "reply":"bobo boe tie"}
-{"listen":"my name is nacho", "reply":"hello nacho!"}
-{"listen":"what is my name?", "reply":"nacho nacho cheese"}
+{"listen":" my name is snuggles what is my name?", "reply":"snuggles the bunny"}
+{"listen":"my name is bobo", "reply":"hi bobo!"}
+{"listen":"my name is bobo what is my name?", "reply":"bobo"}
