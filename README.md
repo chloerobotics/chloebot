@@ -38,7 +38,8 @@ To make new research approachable, silly and fun to the motivated beginner progr
 - [Building Blocks of Neural Networks](notebooks/Elements.ipynb) Word Vector Embeddings, Positional Encoding, Neural Networks, Attention, Masking 
 - [The Network Architecture](notebooks/EncoderDecoder.ipynb) Assembling the building blocks into an encoder and decoder
 - [Talk](notebooks/Talk.ipynb) How chloe chooses which words to say in a sentence and some basic probability
-- [Memory](notebooks/Memory.ipynb) give chloe a memory module **under construction**
+- [Memory](notebooks/Memory.ipynb) give chloe a memory module using the neural turing machine 
+- [Reinforcement Learning](notebooks/RL.ipynb) give chloe a purpose **under construction**
 
 ## How to Start
 
